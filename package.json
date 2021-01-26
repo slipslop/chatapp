@@ -4,7 +4,7 @@
   "description": "realtime app",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node index.js"
   },
   "author": "Vili",
   "license": "ISC",
