@@ -1,0 +1,15 @@
+{
+  "name": "socketio",
+  "version": "1.0.0",
+  "description": "realtime app",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Vili",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.1.0"
+  }
+}

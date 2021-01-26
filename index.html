@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket io</title>
+    <style>
+        div.wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        div.messages-wrapper {
+            border: 1px solid black;
+            overflow: scroll;
+            overflow-x: hidden;
+            width: 50vw;
+            height: 200px;
+        }
+        form.chat {
+            width: 50vw;
+            text-align: center;
+            margin: 20px 0;
+        }
+        form.chat input {
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="messages-wrapper">
+            <ul class="messages"></ul>
+        </div>
+        <form class="chat">
+            <input class="message-input" type="text" placeholder="Type your message...">
+            <button type="submit">Send</button>
+        </form>
+        <form class="username">
+            <input class="username-input" type="text" placeholder="Type your username...">
+            <button type="submit">Set username</button>
+        </form>
+    </div>
+</body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    let socket = io();
+
+    let chatForm = document.querySelector('.chat');
+    let chatInput = document.querySelector('.message-input');
+    let messages = document.querySelector('.messages');
+    let messagesWrapper = document.querySelector('.messages-wrapper');
+    
+    let usernameForm = document.querySelector('.username');
+    let usernameInput = document.querySelector('.username-input');
+
+    hideChat();
+
+    usernameForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if(usernameInput.value) {
+            socket.emit('set username', usernameInput.value, function(data) {
+                if(data) {
+                    showChat();
+                    hideUsernameForm();
+                }else {
+                    console.log(data);
+                }
+            });
+            usernameInput.value = '';
+        }
+    });
+
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if(chatInput.value) {
+            socket.emit('chat message', chatInput.value); // This will emit the event to all connected sockets
+            chatInput.value = '';
+        }
+    });
+
+    socket.on('new connection', function() {
+        
+    });
+
+    socket.on('chat message', function(msg) {
+       addMessage(msg);
+    });
+
+    function addMessage(msg){
+
+        var item = document.createElement('li');
+        item.textContent = msg.username + ': ' + msg.msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+
+    }
+
+    function hideChat(){
+
+        chatForm.style.display = 'none';
+        chatInput.style.display = 'none';
+        messagesWrapper.style.display = 'none';
+
+    }
+
+    function showChat(){
+
+        chatForm.style.removeProperty('display');
+        chatInput.style.removeProperty('display');
+        messagesWrapper.style.removeProperty('display');
+    
+    }
+
+    function hideUsernameForm(){
+
+        usernameForm.style.display = 'none';
+        usernameInput.style.display = 'none';
+
+    }
+
+</script>
