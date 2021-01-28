@@ -64,6 +64,7 @@
         e.preventDefault();
         if(usernameInput.value) {
             socket.emit('set username', usernameInput.value, function(data) {
+                console.log(data);
                 if(data) {
                     showChat();
                     hideUsernameForm();
@@ -84,11 +85,19 @@
     });
 
     socket.on('new connection', function() {
-        
+
     });
 
     socket.on('chat message', function(msg) {
        addMessage(msg);
+    });
+
+    socket.on('user joined', function(user) {
+        let msg = {
+            'username' : 'admin',
+            'msg'   : `${user} joined`,
+        }
+        addMessage(msg);
     });
 
     function addMessage(msg){

@@ -22,8 +22,6 @@ io.on('connection', (socket) => {
        io.emit('chat message', {msg: msg, username : socket.username});
     });
 
-    
-
     socket.on('set username', function(username, callback) {
         console.log('setting username ' + username);
         if(users.includes(username)) {
@@ -32,13 +30,11 @@ io.on('connection', (socket) => {
         socket.username = username;
         users.push(username);
         callback(true);
+        io.emit('user joined', username);
     });
 
-  /*  socket.on('disconnect', () => {
-        io.emit('disconnect');
-    });
- */
 });
+
 http.listen(process.env.PORT || 5000, () => {
 
 });
