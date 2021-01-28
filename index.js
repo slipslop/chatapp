@@ -39,8 +39,6 @@ io.on('connection', (socket) => {
     });
  */
 });
+http.listen(process.env.PORT || 5000, () => {
 
-http.listen(3000, () => {
-    console.log('Listening on 3000');
-    console.log(__dirname);
 });
